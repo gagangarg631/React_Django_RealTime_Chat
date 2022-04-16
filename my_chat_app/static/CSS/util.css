@@ -1,0 +1,101 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+body{
+    overflow-x: hidden;
+}
+
+/* .bd{
+    border: 1px solid black;
+}
+
+.gbd{
+    border: 1px solid green;
+}
+
+.rbd{
+    border: 1px solid red;
+}
+
+.blbd{
+    border: 1px solid blue;
+}
+.wbd{
+    border: 1px solid white;
+} */
+
+.bdr40{
+    border-radius: 40px;
+}
+.bdr20{
+    border-radius: 20px;
+}
+
+
+.fh{
+    height: 100%;
+}
+.fw{
+    width: 100%;
+}
+.fhw{
+    height: 100%;
+    width: 100%;
+}
+
+
+.wh-wrap{
+    display: inline-block;
+}
+.m{
+    margin: 2px;
+}
+.m0{
+    margin: 5px;
+}
+.m1{
+    margin: 10px;
+}
+.m2{
+    margin: 20px;
+}
+.flex{
+    display: flex;
+}
+.flex-r{
+    display: flex;
+    flex-direction: row;
+}
+.flex-all{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.pointer-hand:hover{
+    cursor: pointer;
+}
+
+/* #4156c3 */
+.msg_send_text{
+    background-color: #fd3ca4;
+    color: white;
+    margin-left: 450px;
+    width: 260px;
+}
+.msg_receive_text{
+    background-color: white;
+    color: black;
+    width: 260px;
+}
+.msg_send_image{
+    background-color: #fd3ca4;
+    color: white;
+    margin-left: 520px;
+    width: 200px;
+}
+.msg_receive_image{
+    background-color: white;
+    color: black;
+    width: 200px;
+}

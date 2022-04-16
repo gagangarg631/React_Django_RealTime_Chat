@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <input type="hidden" id="username" value="{{ username }}">
+    <!-- <a href="{% url 'logout' %}">Logout</a> -->
+    <!-- <p class="m2"><strong>{{ username }}</strong></p> -->
+<div class="app_container bd bdr40 flex-all" style="height: 94vh;width: 90vw;margin: 10px auto;padding: 5px;background-color: #370cc3;position: relative;">
+
+    <div class="side_bar gbd wh-wrap bdr40" style="height: 95%;width: 7%;margin: auto;">
+        <div id="my_profile_button" style="height: 75px;" class="flex-all">
+            <div class="user-card-pic wh-wrap" style="height: 90%;border-radius: 100%;overflow: hidden;">   
+                <img src="{% static 'Images/g2.jpg' %}" style="height: 100%;" alt="">
+            </div>
+        </div>
+        <ul id="side_bar_list" class="wbd flex-all" style="width: 100%;height: 300px;margin: 100px 0;flex-direction: column;">
+            <li id="notification_bell" onclick="showNotifications.bind(this)()">
+                <sup style="font-size: 18px;"></sup>
+                <img src="{% static '/Icons/bell.png' %}" height="30px" alt="">
+            </li>
+        </ul>
+    </div>
+
+    <div id="notification_open" class="wbd bdr20" style="width: 260px;height: 100%;z-index: 10;position: absolute;left: 79px;background-color: gray;visibility: hidden;">
+        
+    </div>
+
+    <div class="chatting_container gbd flex bdr40" style="z-index: 2;height: 93%;width: 92%;margin: auto; padding: 10px;background-color: #f3f4fff5;">
+        
+        <div id="friends_list" class="bd wh-wrap bdr40" style="height: 100%;background-color: white;display: flex;flex-direction: column;align-items: center;">
+            
+            <div id="create_new" class="gbd wh-wrap flex-all" style="width: 85%;height:10%;border-radius: 30px;border: 2px dashed black;">
+                <input type="text" placeholder="Create New" name="username" id="user_to_req" style="width: 70%;
+                margin: 0 5px;
+                height: 80%;
+                outline: none;
+                border: none;
+                font-size: 20px;">
+
+                <img src="/static/Icons/connect.png" id="connect_button" onclick="sendRequest()" style="height: 75%;margin: 0 5px;" alt="">
+            </div>
+            
+            <div id="friends" class="blbd wh-wrap" style="width: 100%;max-height: 95%;overflow-y: scroll;">
+
+                {% for item in all_friends %}
+                <div class="friend_card gbd m0 flex-all pointer-hand" onclick="openChat.bind(this)()" style="overflow: hidden;height: 80px;width: 95%;">
+                    <input type="hidden" id="card_username" value="{{ item.username }}">
+                    <div class="user-card-pic wh-wrap" style="height: 90%;border-radius: 100%;overflow: hidden;">   
+                        <img src="{% static 'Images/g2.jpg' %}" style="height: 100%;" alt="">
+                    </div>
+                    <div class="user-card-username wh-wrap" style="width: 70%;font-size: 18px;padding-left: 7px;">
+                        <p class="friend-card-username">{{ item.username }}</p>   
+                        <p class="friend-card-active_time">25 min ago</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+           
+        </div>
+        
+        <div class="bd wh-wrap bdr40" id="friend_chat_open" style="height: 100%;visibility: hidden;">
+            
+
+            <div id="friend-profile-icon" class="blbd fw flex-all" style="height: 10%;width: 96%;margin: auto;">
+                <!-- <div class="back_button wh-wrap" onclick="oneStepBack()">
+                    <img src="/static/Icons/send.png" style="transform: rotate(180deg);" alt="">
+                </div> -->
+                <input type="hidden" name="current_chat_receiver" id="current_chat_receiver">
+                <div class="user-card-pic wh-wrap rbd" style="height: 90%;overflow: hidden;width: 10%;">   
+                    <img src="{% static 'Images/g2.jpg' %}" style="height: 100%;border-radius: 50%;" alt="">
+                </div>
+                <div class="profile-text rbd" style="width: 85%;font-size: 18px;">
+                    <div id="opened-chat-profile_name">
+                        <p>Gagan Garg</p>
+                    </div>
+                    <div id="active_status" style="font-size: 12px;">
+                        Active
+                    </div>
+                </div>
+                <div class="options_dots rbd" style="width: 5%;">
+                    ...
+                </div>
+            </div>
+            
+            <div class="blbd fw" style="height: 78%;position: relative;overflow-y: scroll;margin: 6px 0;" id="chat_box">
+                
+            </div>
+            
+            <div class="message_box blbd fw flex" style="height: 10%;width: 95%;margin: auto;border-radius: 20px;background-color: white;">
+                <div class="file_options rbd flex-all" style="width: 10%;">
+                    <form class="flex-all" action="uploadImages/" method="post" enctype="multipart/form-data" id="send_image_form">
+                        <label for="file_input" class="flex-all">
+                            <img src="/static/Icons/files.png" id="file_input_img" style="width: 60%;height: 60%;" alt="">
+                        </label>
+                        <input id="file_input" style="display: none;" type="file" name="CHAT_IMAGES" onchange="filesInputChanged.bind(this)()"  multiple>
+                    </form>
+                </div>
+                <div class="text_box rbd flex-all" style="width: 70%;">
+                    <input type="text" placeholder="Type you message here..." name="msg_input" id="msg_input" style="width: 100%;
+                    margin: 10px;
+                    height: 50%;
+                    outline: none;
+                    border: none;
+                    font-size: 16px;">
+                </div>
+                <div class="emoji rbd flex-all" style="width: 10%;">
+                    <img src="/static/Icons/emoji.png" id="emoji_input" style="width: 60%;height: 60%;" alt="">
+                </div>
+                <div class="rbd flex-all" style="width: 10%;" id="send_button">
+                    <img src="/static/Icons/send.png" id="msg_send_button" onclick="sendMessage()" alt="">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,59 @@
+#chat_box::-webkit-scrollbar{
+    display: none;
+}
+#friends::-webkit-scrollbar{
+    display: none;
+}
+
+#friend-profile-icon div{
+    margin: 3px;
+}
+#friends_list div{
+    margin: 10px;
+}
+#side_bar_list li{
+    /* border: 1px solid red; */
+}
+#side_bar_list{
+    list-style-type: none;
+}
+
+#send_button, #emoji_input, #file_input, #connect_button, #my_profile_button:hover{
+    cursor: pointer;
+}
+
+@media screen and (max-width: 500px) {
+    #friend_chat_open{
+        width: 0%;
+        visibility: hidden;
+    }
+    #friends_list{
+        width: 100%;
+        visibility: visible;
+    }
+    .msg_send_text,.msg_receive_text{
+        width: 150px;
+    }
+    .msg_send_text{
+        margin-left: 120px;
+    }
+    .msg_send_image,.msg_receive_image{
+        width: 170px;
+    }
+    .msg_send_image .image,.msg_receive_image .image{
+        height: 170px;
+    }
+    .msg_send_image{
+        margin-left: 100px;
+    }
+}
+@media screen and (mix-width: 500px) {
+    #friend_chat_open{
+        width: 68%;
+        visibility: visible;
+    }
+    #friends_list{
+        width: 30%;
+        visibility: visible;
+    }
+}
