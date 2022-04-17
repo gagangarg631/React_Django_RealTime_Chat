@@ -29,8 +29,26 @@ function App() {
 
   const fetchAllChats = async function(){
     let friends = await util.fetchData(util.getFriendsUrl, username);
-    let f_list = friends.map((obj, index) => <ChatListCard username={obj.username} key={index} />);
+    let f_list = friends.map((obj, index) => <ChatListCard tapped={openChat} username={obj.username} key={index} />);
     setFriends(f_list);
+  }
+
+  const openChat = async function(fr_username){
+    let data = await util.fetchData(util.checkUserUrl, fr_username);
+    if (data.found){
+      setUserOpened(fr_username)
+      let prev_chats = await util.fetchData(util.getChatsUrl, username, fr_username);
+      let l_list = prev_chats.map((obj, index) => {
+        if (obj.sender === username){
+          return <ChatSent msg={obj.message} key={index} />
+        }else{
+          return <ChatReceived msg={obj.message} key={index} />
+        }
+      })
+      setChats(l_list);
+    }else{
+      alert("User Not Found!");
+    }
   }
 
   useEffect(() => {
@@ -40,7 +58,9 @@ function App() {
   return (
     <div className="App">
       <div className='left'> 
-        <div style={{height: '10%'}} className='bd profile'></div>
+        <div style={{height: '10%'}} className='bd profile flex-all'>
+          <p style={{fontSize: '20px', fontWeight: 'bold', color: 'green'}}>{ username }</p>
+        </div>
         <hr></hr>
         <div style={{height: '10%'}} className='bd search_bar flex-all'>
           <input className='search_chat_input' placeholder='Search New Chat'
@@ -51,14 +71,9 @@ function App() {
 
           }}></input>
           <img src='/send_msg.png' id='search_chat_btn' width="40px" onClick={async () => {
-            let username = document.querySelector('.search_chat_input').value;
-
-            let data = await util.fetchData(util.checkUserUrl, username);
-            if (data.found){
-              setUserOpened(username)
-            }else{
-              alert("User Not Found!");
-            }
+            let fr_username = document.querySelector('.search_chat_input').value;
+            openChat(fr_username);
+            setFriends([...friends, <ChatListCard tapped={openChat} username={fr_username} key={friends.length} />])
           }}></img>
         </div>
         <hr></hr>
@@ -69,7 +84,7 @@ function App() {
       <div className='right'>
         <div className='chat_box'>
           <div className='chat_head bd' style={{height: '10%', display: 'flex', alignItems: 'center'}}>
-            <img src='/gagan.jpg' style={{borderRadius: '100%',height: '90%', width: '60px', marginLeft: '5px'}}></img>
+            <img src='/avtar.png' style={{borderRadius: '100%',height: '90%', width: '60px', marginLeft: '5px'}}></img>
             <p style={{marginLeft: '20px', fontSize: '20px'}}>{ user_opened }</p>
           </div>
           <hr></hr>

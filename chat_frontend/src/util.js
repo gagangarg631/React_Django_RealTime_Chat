@@ -7,6 +7,7 @@ const util = {
     checkUserUrl: apiUrl + '/checkUser/',
     getFriendsUrl: apiUrl + '/getFriends/',
     createUserUrl: apiUrl + '/createUser/',
+    getChatsUrl: apiUrl + '/getChats/',
 
     scrollChatBox(){
         setTimeout(() => {
@@ -15,11 +16,11 @@ const util = {
           }, 200)
     },
 
-    async fetchData(url, username){
+    async fetchData(url, username, friend_username=null){
         try{
             let result = await fetch(url, {
                 method: 'POST',
-                body: JSON.stringify({ 'username': username }),
+                body: JSON.stringify({ 'username': username, 'friend_username': friend_username }),
                 mode: 'cors',
                 headers: {
                     'Accept': 'application/json',

@@ -1,6 +1,8 @@
+import re
 from django.dispatch import receiver
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from requests import request
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
@@ -33,22 +35,28 @@ def getLastNChats(request, n, friend_username):
 
     return chats
 
+@api_view(['POST'])
+def getChats(request):
+    username = request.data['username']
+    friend_username = request.data['friend_username']
+    chats = Chats.objects.filter(Q(sender=username) | Q(sender=friend_username), 
+                            Q(receiver=username) | Q(receiver=friend_username)).values()
+    return Response(chats)
 
 @api_view(['POST'])
 def createUser(request):
     username = request.data['username']
-    people = People(username=username)
-    people.save()
+    if not People.objects.filter(username=username).exists():
+        people = People(username=username)
+        people.save()
     
     return Response({'status': 'success'})
 
 @api_view(['POST'])
 def getFriends(request):
     username = request.data['username']
-    print(username)
     people = People.objects.get(username=username)
     friends = people.friend.all().values()
-    print(friends)
     return Response(friends)
 
 @api_view(['POST'])
@@ -56,12 +64,9 @@ def checkUser(request):
     username = request.data['username']
     response = {
         'found': '',
-        'chats': ''
     }
     if People.objects.filter(username=username).exists():
-        chats = getLastNChats(request, 0, username)
         response['found'] = True
-        response['chats'] = chats
     else:
         response['found'] = False
 

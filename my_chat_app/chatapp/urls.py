@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('checkUser/', views.checkUser),
     path('getFriends/', views.getFriends),
-    path('getChats/<int:n>/<slug:friend_username>/', views.getLastNChats),
+    path('getChats/', views.getChats),
     path('uploadChatImages/', views.uploadImages),
     path('createUser/', views.createUser),
 
