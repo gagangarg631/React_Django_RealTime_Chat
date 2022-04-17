@@ -145,10 +145,6 @@ CHANNEL_LAYERS = {
     },
 }
 
-LOGIN_URL = '/accounts/login/'
-
-CSRF_TRUSTED_ORIGINS = ['https://8359-136-232-164-14.ngrok.io']
-
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'Media_Files')
