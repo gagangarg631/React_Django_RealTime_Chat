@@ -49,6 +49,9 @@
     width: 98%;
     margin: auto;
     background-color: aliceblue;
+
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 .message_input{
     width: 90%;

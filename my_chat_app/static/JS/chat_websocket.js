@@ -7,9 +7,6 @@ const chatSocket = new WebSocket(
     + '/ws/chat/'
 )
 
-
-
-
 let receive_message = function(data){
     if (friends_chat.hasOwnProperty(app.chat_opened_user)){
 

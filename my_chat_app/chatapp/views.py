@@ -35,8 +35,8 @@ def getLastNChats(request, n, friend_username):
 
 @api_view(['POST'])
 def getFriends(request):
-    me = request.username
-    Chats.objects.filter(Q(sender=me) | Q(receiver=me))
+    username = request.data['usename']
+    print(username)
 
     return Response({})
 

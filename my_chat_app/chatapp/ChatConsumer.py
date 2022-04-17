@@ -3,22 +3,19 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from . import util
 from .models import Chats
+import inspect
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
-        self.user = self.scope['user']
-        
-        if self.user.is_authenticated:
-            self.room_group_name = self.user.username
-            async_to_sync(self.channel_layer.group_add)(
-                self.room_group_name,
-                self.channel_name
-            )
-
-            self.accept()
-        else:
-            print("please login to connect to chats")
-
+        path = self.scope['path']
+        username = path[path.rindex('/') +1 : ]
+        self.username = username
+        self.room_group_name = self.username
+        async_to_sync(self.channel_layer.group_add)(
+            self.room_group_name,
+            self.channel_name
+        )
+        self.accept()
 
     def send_message(self, obj):
         try:
@@ -28,7 +25,7 @@ class ChatConsumer(WebsocketConsumer):
             images = obj['IMAGES']
 
             if not images:
-                chat = Chats(sender=self.user.username, receiver=receiver, message=msg)
+                chat = Chats(sender=self.username, receiver=receiver, message=msg)
                 chat.save()
             
 
@@ -59,15 +56,13 @@ class ChatConsumer(WebsocketConsumer):
         msg = event['message']
         _from = event['_from']
         images = event['images']
-
+        
         _obj = {
             'command': 'receive_message',
             '_from': _from,
             'message': msg,
             'images': images
-
         }
-        
         self.send(text_data=json.dumps(_obj))
 
 

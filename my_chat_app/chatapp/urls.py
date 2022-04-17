@@ -5,7 +5,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', views.home, name='home'),
     path('checkUser/', views.checkUser),
     path('getFriends/', views.getFriends),
     path('getChats/<int:n>/<slug:friend_username>/', views.getLastNChats),
