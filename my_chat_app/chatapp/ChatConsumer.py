@@ -24,10 +24,6 @@ class ChatConsumer(WebsocketConsumer):
             images = obj['IMAGES']
 
             people = People.objects.get(username=self.username)
-            if not people:
-                people = People(username=self.username)
-                people.save()
-
             people.friend.add(receiver)
 
             if not images:

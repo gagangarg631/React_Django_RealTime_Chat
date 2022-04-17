@@ -33,6 +33,15 @@ def getLastNChats(request, n, friend_username):
 
     return chats
 
+
+@api_view(['POST'])
+def createUser(request):
+    username = request.data['username']
+    people = People(username=username)
+    people.save()
+    
+    return Response({'status': 'success'})
+
 @api_view(['POST'])
 def getFriends(request):
     username = request.data['username']

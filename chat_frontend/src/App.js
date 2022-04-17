@@ -43,26 +43,22 @@ function App() {
         <div style={{height: '10%'}} className='bd profile'></div>
         <hr></hr>
         <div style={{height: '10%'}} className='bd search_bar flex-all'>
-          <input className='search_chat_input' placeholder='Search New Chat'></input>
-          <img src='/send_msg.png' width="40px" onClick={() => {
+          <input className='search_chat_input' placeholder='Search New Chat'
+            onKeyUp={(e) => {
+            if (e.key === 'Enter' || e.keyCode === 13){
+              document.getElementById("search_chat_btn").click();
+            }
+
+          }}></input>
+          <img src='/send_msg.png' id='search_chat_btn' width="40px" onClick={async () => {
             let username = document.querySelector('.search_chat_input').value;
 
-            fetch(util.checkUserUrl, {
-              method: "POST",
-              body: JSON.stringify({ 'username': username }),
-              mode: 'cors',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              }
-            }).then(res => res.json()).then(res => {
-              if (res.found){
-                setUserOpened(username);
-              }
-            }).catch(err => {
-              console.log(err);
-            })
-
+            let data = await util.fetchData(util.checkUserUrl, username);
+            if (data.found){
+              setUserOpened(username)
+            }else{
+              alert("User Not Found!");
+            }
           }}></img>
         </div>
         <hr></hr>

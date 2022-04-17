@@ -6,6 +6,7 @@ export const username = "";
 const util = {
     checkUserUrl: apiUrl + '/checkUser/',
     getFriendsUrl: apiUrl + '/getFriends/',
+    createUserUrl: apiUrl + '/createUser/',
 
     scrollChatBox(){
         setTimeout(() => {

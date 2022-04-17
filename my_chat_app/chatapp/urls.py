@@ -9,5 +9,6 @@ urlpatterns = [
     path('getFriends/', views.getFriends),
     path('getChats/<int:n>/<slug:friend_username>/', views.getLastNChats),
     path('uploadChatImages/', views.uploadImages),
+    path('createUser/', views.createUser),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
