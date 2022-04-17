@@ -35,10 +35,12 @@ def getLastNChats(request, n, friend_username):
 
 @api_view(['POST'])
 def getFriends(request):
-    username = request.data['usename']
+    username = request.data['username']
     print(username)
-
-    return Response({})
+    people = People.objects.get(username=username)
+    friends = people.friend.all().values()
+    print(friends)
+    return Response(friends)
 
 @api_view(['POST'])
 def checkUser(request):

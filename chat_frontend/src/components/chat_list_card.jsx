@@ -3,7 +3,7 @@ function ChatListCard(props){
     return (
         <div className='card'>
             <img src='/gagan.jpg' style={{borderRadius: '100%',height: '90%', width: '60px', marginLeft: '5px'}}></img>
-            <p style={{marginLeft: '20px', fontSize: '20px'}}>{ props.name }</p>
+            <p style={{marginLeft: '20px', fontSize: '20px'}}>{ props.username }</p>
         </div>
     )
 }

@@ -1,5 +1,6 @@
 import './style.css';
 import util from './util.js';
+import ChatListCard from './components/chat_list_card';
 import ChatReceived from './components/chatReceived';
 import ChatSent from './components/chatSent';
 import React, { useState, useEffect } from "react";
@@ -12,6 +13,7 @@ function App() {
   const [msg, setMsg] = useState("");
 
   const [chats, setChats] = useState([]);
+  const [friends, setFriends] = useState([]);
 
   const { username } = useLocation().state;
 
@@ -25,9 +27,15 @@ function App() {
     util.scrollChatBox();
   }
 
-  const fetchAllChats = function(){
-    
+  const fetchAllChats = async function(){
+    let friends = await util.fetchData(util.getFriendsUrl, username);
+    let f_list = friends.map((obj, index) => <ChatListCard username={obj.username} key={index} />);
+    setFriends(f_list);
   }
+
+  useEffect(() => {
+    fetchAllChats();
+  }, []);
 
   return (
     <div className="App">
@@ -59,6 +67,7 @@ function App() {
         </div>
         <hr></hr>
         <div style={{height: '79%'}} className='bd chat_list'>
+          {friends}
         </div>
       </div>
       <div className='right'>

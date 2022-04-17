@@ -2,8 +2,7 @@ import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from . import util
-from .models import Chats
-import inspect
+from .models import Chats, People
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
@@ -23,6 +22,13 @@ class ChatConsumer(WebsocketConsumer):
             msg = obj[util.msg]
             receiver = obj[util.receiver]
             images = obj['IMAGES']
+
+            people = People.objects.get(username=self.username)
+            if not people:
+                people = People(username=self.username)
+                people.save()
+
+            people.friend.add(receiver)
 
             if not images:
                 chat = Chats(sender=self.username, receiver=receiver, message=msg)
