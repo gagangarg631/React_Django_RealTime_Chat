@@ -1,9 +1,9 @@
 let chatSocket;
 
-export const setChatSocket = function(username){
+export const setChatSocket = function(username, ip){
     chatSocket = new WebSocket(
         'ws://'
-        + '192.168.106.243:8000'
+        + ip
         + '/ws/chat/'
         +  username
     )

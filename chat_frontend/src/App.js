@@ -19,7 +19,7 @@ function App() {
 
   let chatSocket;
 
-  chatSocket = setChatSocket(username);
+  chatSocket = setChatSocket(username, util.ip);
 
   chatSocket.onmessage = function(ev){
     const data = JSON.parse(ev.data);
@@ -34,6 +34,13 @@ function App() {
   }
 
   const openChat = async function(fr_username){
+
+    if (window.screen.width <= 500){
+      document.querySelector(".App .left").style.display = 'none';
+      document.querySelector(".App .right").style.display = 'initial';
+
+    }
+    
     let data = await util.fetchData(util.checkUserUrl, fr_username);
     if (data.found){
       setUserOpened(fr_username)
@@ -61,8 +68,7 @@ function App() {
         <div style={{height: '10%'}} className='bd profile flex-all'>
           <p style={{fontSize: '20px', fontWeight: 'bold', color: 'green'}}>{ username }</p>
         </div>
-        <hr></hr>
-        <div style={{height: '10%'}} className='bd search_bar flex-all'>
+        <div className='bd search_bar flex-all'>
           <input className='search_chat_input' placeholder='Search New Chat'
             onKeyUp={(e) => {
             if (e.key === 'Enter' || e.keyCode === 13){
@@ -70,28 +76,27 @@ function App() {
             }
 
           }}></input>
-          <img src='/send_msg.png' id='search_chat_btn' width="40px" onClick={async () => {
+          <img src='/send_msg.png' id='search_chat_btn' style={{margin: '0 5px'}} width="35px" onClick={async () => {
             let fr_username = document.querySelector('.search_chat_input').value;
             openChat(fr_username);
             setFriends([...friends, <ChatListCard tapped={openChat} username={fr_username} key={friends.length} />])
           }}></img>
         </div>
-        <hr></hr>
         <div style={{height: '79%'}} className='bd chat_list'>
           {friends}
         </div>
       </div>
       <div className='right'>
         <div className='chat_box'>
-          <div className='chat_head bd' style={{height: '10%', display: 'flex', alignItems: 'center'}}>
-            <img src='/avtar.png' style={{borderRadius: '100%',height: '90%', width: '60px', marginLeft: '5px'}}></img>
+          <div className='chat_head bd'>
+            <img src='/avtar.png'></img>
             <p style={{marginLeft: '20px', fontSize: '20px'}}>{ user_opened }</p>
           </div>
-          <hr></hr>
-          <div id='chat_container' className='chat_container bd'style={{height: '79%'}}>
-            {chats}
+          <div className='chat_container_cover' style={{height: '79%'}}>
+            <div id='chat_container' className='chat_container bd'style={{height: '100%'}}>
+              {chats}
+            </div>
           </div>
-          <hr></hr>
           <div className='chat_bottom bd flex-all' style={{height: '10%'}}>
             <input placeholder='Type a message' onChange={(e) => {
               setMsg(e.target.value);
@@ -110,7 +115,7 @@ function App() {
               util.scrollChatBox();
               setMsg("");
             }} 
-            width={"40px"} 
+            width={"35px"} 
             style={{margin: '0px 10px'}}></img>
 
           </div>

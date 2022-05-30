@@ -1,9 +1,11 @@
-const baseUrl = `http://192.168.106.243:8000`;
+const ip = '192.168.106.175:8000';
+const baseUrl = `http://${ip}`;
 const apiUrl = `${baseUrl}/api`;
 
 export const username = "";
 
 const util = {
+    ip: ip,
     checkUserUrl: apiUrl + '/checkUser/',
     getFriendsUrl: apiUrl + '/getFriends/',
     createUserUrl: apiUrl + '/createUser/',
