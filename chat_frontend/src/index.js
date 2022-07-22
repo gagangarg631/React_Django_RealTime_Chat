@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   // I removed strict mode to avoid problem of calling useEffect twice instead of once
     <BrowserRouter>

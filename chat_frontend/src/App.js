@@ -17,13 +17,22 @@ function App() {
 
   const { username } = useLocation().state;
 
+  const [search, setSearch] = useState("");
+
   let chatSocket;
 
   chatSocket = setChatSocket(username, util.ip);
 
   chatSocket.onmessage = function(ev){
     const data = JSON.parse(ev.data);
-    setChats([...chats, <ChatReceived msg={data.message} key={chats.length}/>])
+
+    let fr = document.querySelector(`.card input[name="${data._from}"]`);
+    
+    if (fr){
+
+    }else{
+      setFriends([...friends, <ChatListCard tapped={openChat} username={data._from} key={friends.length} />])
+    }
     util.scrollChatBox();
   }
 
@@ -42,7 +51,10 @@ function App() {
     }
     
     let data = await util.fetchData(util.checkUserUrl, fr_username);
+    
     if (data.found){
+      
+      setFriends([...friends, <ChatListCard tapped={openChat} username={fr_username} key={friends.length} />])
       setUserOpened(fr_username)
       let prev_chats = await util.fetchData(util.getChatsUrl, username, fr_username);
       let l_list = prev_chats.map((obj, index) => {
@@ -69,17 +81,21 @@ function App() {
           <p style={{fontSize: '20px', fontWeight: 'bold', color: 'green'}}>{ username }</p>
         </div>
         <div className='bd search_bar flex-all'>
-          <input className='search_chat_input' placeholder='Search New Chat'
+          <input className='search_chat_input' placeholder='Search New Chat' value={search}
             onKeyUp={(e) => {
             if (e.key === 'Enter' || e.keyCode === 13){
               document.getElementById("search_chat_btn").click();
             }
 
-          }}></input>
+          }} onChange={
+            (e) => {
+              setSearch(e.target.value);
+            }
+          }></input>
           <img src='/send_msg.png' id='search_chat_btn' style={{margin: '0 5px'}} width="35px" onClick={async () => {
-            let fr_username = document.querySelector('.search_chat_input').value;
+            let fr_username = search;
+            setSearch("");
             openChat(fr_username);
-            setFriends([...friends, <ChatListCard tapped={openChat} username={fr_username} key={friends.length} />])
           }}></img>
         </div>
         <div style={{height: '79%'}} className='bd chat_list'>
