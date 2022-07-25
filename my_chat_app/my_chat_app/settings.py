@@ -147,6 +147,6 @@ CHANNEL_LAYERS = {
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'Media_Files')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'MediaFiles')
 
 CORS_ALLOW_ALL_ORIGINS = True

@@ -1,8 +1,13 @@
+from email.mime import image
 import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from . import util
-from .models import Chats, People
+from .models import Chats, People, FileData
+
+from django.core.files.base import ContentFile
+import base64
+import binascii
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
@@ -21,15 +26,21 @@ class ChatConsumer(WebsocketConsumer):
 
             msg = obj[util.msg]
             receiver = obj[util.receiver]
-            images = obj['IMAGES']
-
+            file = obj['FILE']
+            print(obj)
             people = People.objects.get(username=self.username)
             people.friend.add(receiver)
 
-            if not images:
-                chat = Chats(sender=self.username, receiver=receiver, message=msg)
-                chat.save()
             
+            chat = Chats(sender=self.username, receiver=receiver, message=msg)
+            chat.save()
+            if file:
+                format, imgstr = file.split(';base64,') 
+                ext = format.split('/')[-1] 
+                file_data = ContentFile(base64.b64decode(imgstr),name='kd')
+                new_file = FileData(chat=chat, file=file_data)
+                new_file.save()
+
 
             async_to_sync(self.channel_layer.group_send)(
                 receiver,
@@ -37,7 +48,7 @@ class ChatConsumer(WebsocketConsumer):
                     'type': 'receive_message',
                     'message': msg,
                     '_from': self.room_group_name,
-                    'images': images
+                    'images': file
 
                 }
             )
@@ -49,10 +60,11 @@ class ChatConsumer(WebsocketConsumer):
     }
 
     def receive(self,text_data):
-        json_obj = json.loads(text_data)
-        if json_obj['command'] in self.commands:
-            self.commands[json_obj['command']](self, json_obj)
-
+        if text_data:
+            json_obj = json.loads(text_data)
+            if json_obj['command'] in self.commands:
+                self.commands[json_obj['command']](self, json_obj)
+        
 
     def receive_message(self, event):
         msg = event['message']

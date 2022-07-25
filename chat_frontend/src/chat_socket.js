@@ -19,12 +19,12 @@ const commands = {
     'receive_message': receive_message,
 }
 
-export const sendMessage = function(msg, receiver, saved_chat_ids_json=null){
+export const sendMessage = function(msg, file, receiver){
     chatSocket.send(JSON.stringify({
         'command': 'send_message',
         'MESSAGE': msg,
         'RECEIVER': receiver,
-        'IMAGES': saved_chat_ids_json,
+        'FILE': file,
     }))
 
 

@@ -54,7 +54,7 @@ function App() {
     
     if (data.found){
       
-      setFriends([...friends, <ChatListCard tapped={openChat} username={fr_username} key={friends.length} />])
+      // setFriends([...friends, <ChatListCard tapped={openChat} username={fr_username} key={friends.length} />])
       setUserOpened(fr_username)
       let prev_chats = await util.fetchData(util.getChatsUrl, username, fr_username);
       let l_list = prev_chats.map((obj, index) => {
@@ -114,6 +114,7 @@ function App() {
             </div>
           </div>
           <div className='chat_bottom bd flex-all' style={{height: '10%'}}>
+            <input type="file" id='file_input'></input>
             <input placeholder='Type a message' onChange={(e) => {
               setMsg(e.target.value);
             }} onKeyUp={(e) => {
@@ -125,11 +126,33 @@ function App() {
             src='/send_msg.png' 
             id='send_msg_btn'
             onClick={() => {
-              // send message to server (to send it to receiver)
-              sendMessage(msg, user_opened);
-              setChats([...chats, <ChatSent msg={msg} key={chats.length} />])
-              util.scrollChatBox();
-              setMsg("");
+
+              let fl_input = document.getElementById("file_input");
+              let reader = new FileReader();
+              let rawData = new ArrayBuffer();
+              
+              reader.loadend = function(){
+                
+              }
+              reader.addEventListener('load', function(e){
+                rawData = e.target.result;
+
+                // send message to server (to send it to receiver)
+                sendMessage(msg, rawData, user_opened);
+                setChats([...chats, <ChatSent msg={msg} key={chats.length} />])
+                util.scrollChatBox();
+                setMsg("");
+              })
+              reader.addEventListener('progress',function(ev){
+                console.log(`${ev.type}: ${ev.loaded} bytes transferred\n`);
+
+                if (ev.type === "load") {
+                  console.log("result " + reader.result);
+                }
+              })
+              // reader.readAsBinaryString(fl_input.files[0]);
+              reader.readAsDataURL(new Blob([fl_input.files[0]]));
+              
             }} 
             width={"35px"} 
             style={{margin: '0px 10px'}}></img>

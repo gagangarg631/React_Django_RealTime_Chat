@@ -17,8 +17,10 @@ class People(models.Model):
 class Chats(models.Model):
     sender = models.CharField(max_length=50, default="deleted")
     receiver = models.CharField(max_length=50, default="deleted")
-    image = models.ImageField(upload_to='Chats/',null=True)
     message = models.TextField()
     send_time = models.DateTimeField(auto_now=True)
     receive_time = models.DateTimeField(null=True)
 
+class FileData(models.Model):
+    file = models.FileField(upload_to='UserMediaFiles/')
+    chat = models.ForeignKey('Chats', on_delete=models.CASCADE)
