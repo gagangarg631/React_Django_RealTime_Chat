@@ -6,7 +6,7 @@ from requests import request
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
-from .models import People, Chats
+from .models import People, Chats, FileData
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from . import util
@@ -20,6 +20,16 @@ def getChats(request):
     friend_username = request.data['friend_username']
     chats = Chats.objects.filter(Q(sender=username) | Q(sender=friend_username), 
                             Q(receiver=username) | Q(receiver=friend_username)).values()
+
+    for chat in chats:
+        if (FileData.objects.filter(chat=chat['id']).exists()):
+            files = FileData.objects.filter(chat=chat['id'])
+            for file in files:
+                chat['file'] = {
+                    'url': file.getFileUrl(),
+                    'type': file.file_type
+                }
+        
     return Response(chats)
 
 @api_view(['POST'])

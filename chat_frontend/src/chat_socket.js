@@ -20,12 +20,10 @@ const commands = {
 }
 
 export const sendMessage = function(msg, file, receiver){
-    chatSocket.send(JSON.stringify({
+    let res = chatSocket.send(JSON.stringify({
         'command': 'send_message',
         'MESSAGE': msg,
         'RECEIVER': receiver,
-        'FILE': file,
+        'FILES': file,
     }))
-
-
 }

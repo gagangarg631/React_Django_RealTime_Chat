@@ -1,8 +1,11 @@
-function ChatReceived(props){
+import ChatMediaCard from "./chat_media_card";
+
+function ChatReceived({msg,file}){
     return (
         <div className='chat_card_cover bd' style={{width: '100%'}}>
               <div className='chat_card chat_received'>
-                <span>{ props.msg }</span>
+                {file ? <ChatMediaCard file={file}/> : ""}
+                <span>{ msg }</span>
               </div>
         </div>
     )

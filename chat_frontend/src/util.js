@@ -10,12 +10,13 @@ const util = {
     getFriendsUrl: apiUrl + '/getFriends/',
     createUserUrl: apiUrl + '/createUser/',
     getChatsUrl: apiUrl + '/getChats/',
+    mediaUrl: apiUrl,
 
     scrollChatBox(){
         setTimeout(() => {
             let chatbox = document.getElementById("chat_container");
             chatbox.scrollTop = chatbox.scrollHeight;
-          }, 200)
+          }, 500)
     },
 
     async fetchData(url, username, friend_username=null){

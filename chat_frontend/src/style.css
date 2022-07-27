@@ -61,6 +61,9 @@
     overflow-y: auto;
     overflow-x: hidden;
 }
+.chat_container::-webkit-scrollbar {
+    display: none;
+  }
 .chat_head{
     height: 10%;
     display: flex;

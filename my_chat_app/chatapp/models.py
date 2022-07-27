@@ -24,3 +24,7 @@ class Chats(models.Model):
 class FileData(models.Model):
     file = models.FileField(upload_to='UserMediaFiles/')
     chat = models.ForeignKey('Chats', on_delete=models.CASCADE)
+    file_type = models.CharField(max_length=20)
+
+    def getFileUrl(self):
+        return self.file.url
