@@ -1,4 +1,4 @@
-const ip = '192.168.29.246:8000';
+const ip = '192.168.43.74:8000';
 const baseUrl = `http://${ip}`;
 const apiUrl = `${baseUrl}/api`;
 

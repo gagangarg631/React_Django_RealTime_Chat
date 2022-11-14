@@ -27,6 +27,10 @@ function App() {
   const assignSocket = function(){
     chatSocket = setChatSocket(username, util.ip);
 
+    chatSocket.onerror = function(e){
+      console.log(e);
+    }
+
     chatSocket.onclose = function(ev){
       console.log('socket closed');
     }
@@ -80,8 +84,10 @@ function App() {
       let prev_chats = await util.fetchData(util.getChatsUrl, username, fr_username);
       let l_list = prev_chats.map((obj, index) => {
         if (obj.sender === username){
+          console.log(obj);
           return <ChatSent msg={obj.message} file={obj.file} key={index} />
         }else{
+          console.log(obj)
           return <ChatReceived msg={obj.message} file={obj.file} key={index} />
         }
       })
@@ -94,7 +100,15 @@ function App() {
   const sendMSG = function(file=null){
     // send message to server (to send it to receiver)
     sendMessage(msg, file, user_opened);
-    setChats([...chats, <ChatSent msg={msg} key={chats.length} />])
+    console.log(file);
+    if (file){
+      file = {
+        type: file.file_type,
+        url: file.data
+      }
+    }
+    setChats([...chats, <ChatSent msg={msg} file={file} key={chats.length} />])
+    console.log(file);
     util.scrollChatBox();
     setMsg("");
   }

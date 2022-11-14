@@ -5,7 +5,8 @@ function ChatMediaCard({file}) {
 
     let content = ``;
     if (type == "image"){
-        content = <img style={{width: '210px'}} src={ util.mediaUrl + file.url }></img>
+
+        content = <img style={{width: '210px'}} src={ (file.url.slice(0,4) == "data" ? "" : util.mediaUrl) + file.url }></img>
     }else if (type == "application"){
         content = <div>This is file</div>
     }
